@@ -9,34 +9,37 @@ const regexMail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-
 
 //setting the error message
 const setError = (id, message) => {
-    let errorMsg = document.createElement("em")
+    let errorMsg = id.nextElementSibling
     errorMsg.innerHTML = message;
     id.style.borderColor = 'hsl(0, 100%, 74%)'
     id.parentElement.appendChild(errorMsg)
+    id.parentElement.classList.add("error")
 }
 
 //set success
-const setSuccess = (id) => {
+const setSuccess = (id, message) => {
+    let errorMsg = id.nextElementSibling
+    errorMsg.innerHTML = message;
+    id.parentElement.classList.remove("error")
     id.style.borderColor = "hsl(154, 59%, 51%)"
 }
 
 //eventlistener for the submit button
 submit.addEventListener("click", (e) => {
-    e.preventDefault()
     if(firstName.value === ""){
         setError(firstName, "Firstname cannot be empty")
     }
     else{
-        setSuccess(firstName)
+        setSuccess(firstName, "")
     }
     if(lastName.value === ""){
         setError(lastName, "Lastname cannot be empty")
     }
     else{
-        setSuccess(lastName)
+        setSuccess(lastName, "")
     }
     if(email.value.match(regexMail)){
-        setSuccess(email)
+        setSuccess(email, "")
     }
     else if(email.value === ""){
         setError(email, "Email cannot be empty")
@@ -48,6 +51,13 @@ submit.addEventListener("click", (e) => {
         setError(password, "Password cannot be empty")
     }
     else{
-        setSuccess(password)
+        setSuccess(password, "")
+    }
+
+    if((firstName && lastName && password !== "")&&(email.value.match(regexMail))){
+        alert("Response recorded!")
+    }
+    else{
+        e.preventDefault();
     }
 })
